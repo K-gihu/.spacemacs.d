@@ -542,6 +542,9 @@ before packages are loaded."
             fold-nodes)))))
   (evil--add-to-alist 'origami-parser-alist 'matlab-mode 'origami-parser-imenu-flat)
 
+  ;; 设置 treemacs 使用的 python.exe 的路径
+  (setq treemacs-python-executable "c:/Program Files/Python37/python.exe")
+
   ;; 最大化
   (spacemacs/toggle-maximize-frame-on)
 
