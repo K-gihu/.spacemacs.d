@@ -600,7 +600,7 @@ before packages are loaded."
   ;; org 相关命令
   ;;
   ;; org-tempo 让 <s tab 可以使用
-  (require 'org-tempo)
+  ;; (require 'org-tempo)
   (with-eval-after-load 'org
     ;; latex 相关设置
     (setq org-latex-compiler "pdflatex")
