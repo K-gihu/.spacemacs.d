@@ -633,14 +633,20 @@ before packages are loaded."
     (setq smart-input-source-english "1033")
     (setq-default smart-input-source-other "2052"))
 
-  (smart-input-source-global-auto-english-mode t)
-  (smart-input-source-global-preserve-mode t)
+  ;; enable the /cursor color/ mode
+  (smart-input-source-global-cursor-color-mode t)
+  ;; enable the /respect/ mode
+  (smart-input-source-global-respect-mode t)
+  ;; enable the /follow context/ mode for all buffers
+  (smart-input-source-global-follow-context-mode t)
+  ;; enable the /inline english/ mode for all buffers
+  (smart-input-source-global-inline-english-mode t)
 
-  (dolist (hook '(text-mode-hook prog-mode-hook org-mode-hook))
-    (add-hook hook #'smart-input-source-follow-context-mode))
+  ;; (dolist (hook '(text-mode-hook prog-mode-hook org-mode-hook))
+  ;;   (add-hook hook #'smart-input-source-follow-context-mode))
 
-  (dolist (hook '(text-mode-hook prog-mode-hook org-mode-hook))
-    (add-hook hook #'smart-input-source-inline-english-mode))
+  ;; (dolist (hook '(text-mode-hook prog-mode-hook org-mode-hook))
+  ;;   (add-hook hook #'smart-input-source-inline-english-mode))
 
   ;;---------------------------------------------
   ;;---------------------------------------------
