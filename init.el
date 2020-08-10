@@ -296,7 +296,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
    ;; the commands bound to the current keystroke sequence. (default 0.4)
-   dotspacemacs-which-key-delay 0.4
+   dotspacemacs-which-key-delay 1.0
 
    ;; Which-key frame position. Possible values are `right', `bottom' and
    ;; `right-then-bottom'. right-then-bottom tries to display the frame to the
@@ -505,6 +505,18 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  ;; 不使用fill（就是不维持文本的一定列宽度不变）
+  (spacemacs/toggle-auto-fill-mode-off)
+  ;; Make movement keys work like they should
+  ;; 上下移动光标时按照所见行移动，而非逻辑行
+  ;; https://stackoverflow.com/questions/20882935/how-to-move-between-visual-lines-and-move-past-newline-in-evil-mode
+  (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+  (define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+  (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+  (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+  ;; Make horizontal movement cross lines
+  (setq-default evil-cross-lines t)
+
   ;;
   ;; ranger configuration
   ;;
@@ -513,6 +525,10 @@ before packages are loaded."
   (setq ranger-cleanup-eagerly t)
   (setq ranger-parent-depth 1)
   (setq ranger-show-hidden t)
+
+  ;; doom-modeline 配置
+  (setq doom-modeline-buffer-file-name-style 'file-name)
+
   ;;
   ;; origami 配置
   ;;
@@ -556,6 +572,9 @@ before packages are loaded."
                    ranges)))
             fold-nodes)))))
   (evil--add-to-alist 'origami-parser-alist 'matlab-mode 'origami-parser-imenu-flat)
+
+  ;; 语言编码设置
+  ;; (modify-coding-system-alist 'process "[mM][aA][gG][iI][tT]" 'utf-8)
 
   ;; 设置 treemacs 使用的 python.exe 的路径
   ;; (setq treemacs-python-executable "c:/Program Files/Python37/python.exe")
@@ -732,24 +751,6 @@ before packages are loaded."
   ;;---------------------------------------------
   )
 
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(cdlatex-use-dollar-to-ensure-math nil)
- '(org-agenda-files (quote ("~/Documents/org_notebooks/mynotebook.org")))
- '(pyim-dicts
-   (quote
-    ((:name "pyim-bigdict" :file "c:/Users/Kristing/pyim-bigdict.pyim.gz")))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
 This is an auto-generated function, do not modify its content directly, use
@@ -765,9 +766,15 @@ This function is called at the very end of Spacemacs initialization."
  '(cdlatex-use-dollar-to-ensure-math nil)
  '(evil-want-Y-yank-to-eol nil)
  '(org-agenda-files (quote ("~/Documents/org_notebooks/mynotebook.org")))
+ '(org-capture-templates
+   (quote
+    (("c" "capturing in general" entry
+      (file "~/Documents/org_notebooks/INBOX.org")
+      ""))))
  '(package-selected-packages
    (quote
-    (lsp-ui lsp-treemacs lsp-python-ms lsp-java helm-lsp outshine yapfify yaml-mode web-beautify utop tuareg caml tide typescript-mode seeing-is-believing rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe rbenv rake pytest pyenv-mode py-isort prettier-js pippel pipenv pyvenv pip-requirements ocp-indent ob-elixir nodejs-repl mvn minitest meghanada maven-test-mode livid-mode skewer-mode simple-httpd live-py-mode json-navigator hierarchy json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc importmagic epc ctable concurrent deferred helm-pydoc lsp-mode markdown-mode dash-functional groovy-mode groovy-imports pcache gradle-mode git-gutter-fringe+ fringe-helper git-gutter+ flycheck-pos-tip flycheck-ocaml merlin flycheck-credo emojify emoji-cheat-sheet-plus dune cython-mode company-emoji company-anaconda chruby bundler inf-ruby browse-at-remote blacken anaconda-mode pythonic alchemist elixir-mode counsel swiper ivy yasnippet-snippets xterm-color ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toc-org terminal-here symon symbol-overlay string-inflection spaceline-all-the-icons smeargle smart-input-source shell-pop restart-emacs rainbow-delimiters pyim posframe popwin pcre2el password-generator paradox overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-cliplink org-brain open-junk-file nameless multi-term move-text magit-svn magit-section magit-gitflow macrostep lorem-ipsum link-hint indent-guide hybrid-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link fuzzy font-lock+ flycheck-package flycheck-elsa flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emr elisp-slime-nav editorconfig dumb-jump dotenv-mode diminish devdocs define-word company-quickhelp column-enforce-mode cnfonts clean-aindent-mode centered-cursor-mode cdlatex auto-yasnippet auto-highlight-symbol auto-compile auctex aggressive-indent ace-link ace-jump-helm-line ac-ispell)))
+    (web-mode tagedit slim-mode scss-mode sass-mode pug-mode impatient-mode helm-css-scss haml-mode emmet-mode counsel-css company-web web-completion-data add-node-modules-path vmd-mode mmm-mode markdown-toc gh-md lsp-ui lsp-treemacs lsp-python-ms lsp-java helm-lsp outshine yapfify yaml-mode web-beautify utop tuareg caml tide typescript-mode seeing-is-believing rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe rbenv rake pytest pyenv-mode py-isort prettier-js pippel pipenv pyvenv pip-requirements ocp-indent ob-elixir nodejs-repl mvn minitest meghanada maven-test-mode livid-mode skewer-mode simple-httpd live-py-mode json-navigator hierarchy json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc importmagic epc ctable concurrent deferred helm-pydoc lsp-mode markdown-mode dash-functional groovy-mode groovy-imports pcache gradle-mode git-gutter-fringe+ fringe-helper git-gutter+ flycheck-pos-tip flycheck-ocaml merlin flycheck-credo emojify emoji-cheat-sheet-plus dune cython-mode company-emoji company-anaconda chruby bundler inf-ruby browse-at-remote blacken anaconda-mode pythonic alchemist elixir-mode counsel swiper ivy yasnippet-snippets xterm-color ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toc-org terminal-here symon symbol-overlay string-inflection spaceline-all-the-icons smeargle smart-input-source shell-pop restart-emacs rainbow-delimiters pyim posframe popwin pcre2el password-generator paradox overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-cliplink org-brain open-junk-file nameless multi-term move-text magit-svn magit-section magit-gitflow macrostep lorem-ipsum link-hint indent-guide hybrid-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link fuzzy font-lock+ flycheck-package flycheck-elsa flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emr elisp-slime-nav editorconfig dumb-jump dotenv-mode diminish devdocs define-word company-quickhelp column-enforce-mode cnfonts clean-aindent-mode centered-cursor-mode cdlatex auto-yasnippet auto-highlight-symbol auto-compile auctex aggressive-indent ace-link ace-jump-helm-line ac-ispell)))
+ '(paradox-github-token t)
  '(pyim-dicts
    (quote
     ((:name "pyim-bigdict" :file "c:/Users/Kristing/pyim-bigdict.pyim.gz")))))
