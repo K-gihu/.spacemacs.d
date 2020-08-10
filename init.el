@@ -50,7 +50,7 @@ This function should only modify configuration layer settings."
      helm
      ;; lsp
      ;; markdown
-     multiple-cursors
+     ;; multiple-cursors
      org
      ;; (shell :variables
      ;;        shell-default-height 30
@@ -58,7 +58,11 @@ This function should only modify configuration layer settings."
      ;; spell-checking
      ;; syntax-checking
      ;; version-control
-     treemacs
+     ;; treemacs
+     latex
+     markdown
+     (ranger :variables
+             ranger-show-preview t)
      )
 
    ;; List of additional packages that will be installed without being
@@ -74,7 +78,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(google-translate)
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -502,6 +506,14 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
   ;;
+  ;; ranger configuration
+  ;;
+  ;; You can set the number of folders to nest to the left, adjusted by =z-= and =z+=
+  (setq ranger-enter-with-minus t)
+  (setq ranger-cleanup-eagerly t)
+  (setq ranger-parent-depth 1)
+  (setq ranger-show-hidden t)
+  ;;
   ;; origami 配置
   ;;
   ;; https://github.com/gregsexton/origami.el/issues/69#issue-314088428
@@ -546,7 +558,7 @@ before packages are loaded."
   (evil--add-to-alist 'origami-parser-alist 'matlab-mode 'origami-parser-imenu-flat)
 
   ;; 设置 treemacs 使用的 python.exe 的路径
-  (setq treemacs-python-executable "c:/Program Files/Python37/python.exe")
+  ;; (setq treemacs-python-executable "c:/Program Files/Python37/python.exe")
 
   ;; 最大化
   (spacemacs/toggle-maximize-frame-on)
