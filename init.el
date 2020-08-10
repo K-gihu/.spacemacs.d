@@ -292,7 +292,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil, the paste transient-state is enabled. While enabled, after you
    ;; paste something, pressing `C-j' and `C-k' several times cycles through the
    ;; elements in the `kill-ring'. (default nil)
-   dotspacemacs-enable-paste-transient-state nil
+   dotspacemacs-enable-paste-transient-state t
 
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
    ;; the commands bound to the current keystroke sequence. (default 0.4)
@@ -563,7 +563,7 @@ before packages are loaded."
   ;; 最大化
   (spacemacs/toggle-maximize-frame-on)
 
-  ;; 将粘贴命令绑定到 C-y
+  ;; 将粘贴命令绑定到 C-v
   (define-key evil-insert-state-map (kbd "C-v") #'yank)
 
   ;; 打开菜单栏
