@@ -68,7 +68,7 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(cdlatex auctex posframe yasnippet-snippets smart-input-source org-fragtog matlab-mode)
+   dotspacemacs-additional-packages '(cdlatex posframe yasnippet-snippets sis org-fragtog matlab-mode)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -626,27 +626,33 @@ before packages are loaded."
   ;;
   ;; 使用 smart-input-source 代替 pyim 进行中文输入
   ;;
-  (require 'smart-input-source)
+  (require 'sis)
 
   (when (eq system-type 'windows-nt)
-    (setq smart-input-source-external-ism "im-select.exe")
-    (setq smart-input-source-english "1033")
-    (setq-default smart-input-source-other "2052"))
+    ;; (setq smart-input-source-external-ism "im-select.exe")
+    ;; (setq smart-input-source-english "1033")
+    ;; (setq-default smart-input-source-other "2052")
+    (sis-ism-lazyman-config "1033" "2052" 'im-select)
+    )
 
   ;; enable the /cursor color/ mode
-  (smart-input-source-global-cursor-color-mode t)
+  (sis-global-cursor-color-mode t)
   ;; enable the /respect/ mode
-  (smart-input-source-global-respect-mode t)
+  (sis-global-respect-mode t)
   ;; enable the /follow context/ mode for all buffers
-  (smart-input-source-global-follow-context-mode t)
+  (sis-global-follow-context-mode t)
   ;; enable the /inline english/ mode for all buffers
-  (smart-input-source-global-inline-english-mode t)
+  (sis-global-inline-mode t)
+
+  ;; inline 模式退出时不删除启始的空格
+  (setq sis-inline-tighten-head-rule 0)
+
+  ;; ;; enable the /follow context/ and /inline region/ mode for specific buffers
+  ;; (dolist (hook '(text-mode-hook prog-mode-hook org-mode-hook))
+  ;;   (add-hook hook #'sis-follow-context-mode))
 
   ;; (dolist (hook '(text-mode-hook prog-mode-hook org-mode-hook))
-  ;;   (add-hook hook #'smart-input-source-follow-context-mode))
-
-  ;; (dolist (hook '(text-mode-hook prog-mode-hook org-mode-hook))
-  ;;   (add-hook hook #'smart-input-source-inline-english-mode))
+  ;;   (add-hook hook #'sis-inline-mode))
 
   ;;---------------------------------------------
   ;;---------------------------------------------
